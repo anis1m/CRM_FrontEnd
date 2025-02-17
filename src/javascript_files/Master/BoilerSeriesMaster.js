@@ -13,7 +13,8 @@ function BoilerSeriesMaster() {
   const [tabledata, setTableData] = useState([]);
   const [reload, setReload] = useState(false);
   const [triggerupdate, settriggerupdate] = useState(false);
-  const [boilerseriesupdatedata, setboilerseriesupdatedata] = useState([]);
+  const [boilerseriesupdatedata, setboilerseriesupdatedata] = useState(null);
+  const [datareload, setdatareload] = useState(0);
 
   function setsearchedtabledata(tabledata) {
     setTableData([]);
@@ -29,8 +30,17 @@ function BoilerSeriesMaster() {
     setshowsearchform(false);
   }
 
-  function fetchboilerseriesdata(boilerseriesdataarr) {
-    setboilerseriesupdatedata(boilerseriesdataarr);
+  function fetchboilerseriesdata(boilerseriesid) {
+    const url = `${process.env.REACT_APP_API_URL}/api/v1/BoilerSeries/GetBoilerSeriesById?id=${boilerseriesid}`;
+    axios
+      .get(url)
+      .then((res) => {
+        console.log(res.data);
+        setboilerseriesupdatedata(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   useEffect(() => {
@@ -83,7 +93,7 @@ function BoilerSeriesMaster() {
             setReload={setReload}
             triggerupdate={triggerupdate}
             boilerseriesupdatedata={boilerseriesupdatedata}
-            key={`${boilerseriesupdatedata}-${triggerupdate}`}
+            key={`${boilerseriesupdatedata?.id}-${triggerupdate}-${datareload}`}
           />
         )}
         {showsearchform && (
@@ -101,6 +111,8 @@ function BoilerSeriesMaster() {
           url="BoilerSeries/DeleteBoilerSeries"
           reload={reload}
           setReload={setReload}
+          setdatareload={setdatareload}
+          datareload={datareload}
         />
       </section>
     </>
