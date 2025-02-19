@@ -21,7 +21,8 @@
 }
 
 .add-customer-master blockquote input,
-.add-customer-master blockquote textarea {
+.add-customer-master blockquote textarea,
+.add-customer-master blockquote select {
   padding: 0.5rem;
   font-size: 1rem;
   width: 100%;

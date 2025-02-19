@@ -21,7 +21,8 @@
 }
 
 .add-customer-pricing-master blockquote input,
-.add-customer-pricing-master blockquote textarea {
+.add-customer-pricing-master blockquote textarea,
+.add-customer-pricing-master blockquote select {
   padding: 0.5rem;
   font-size: 1rem;
   width: 100%;

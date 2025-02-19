@@ -21,6 +21,7 @@ function CustomerMaster() {
   const [reload, setReload] = useState(false);
   const [triggerupdate, settriggerupdate] = useState(false);
   const [customerupdatedata, setcustomerupdatedata] = useState([]);
+  const [datareload, setdatareload] = useState(0);
 
   function setsearchedtabledata(tabledata) {
     setTableData([]);
@@ -28,9 +29,6 @@ function CustomerMaster() {
     tablearr.push(tabledata.id);
     tablearr.push(tabledata.orgName);
     tablearr.push(tabledata.description);
-    tablearr.push(tabledata.addresses);
-    tablearr.push(tabledata.contactCentres);
-    tablearr.push(tabledata.customerBoilers);
     setTableData((prev) => {
       const arr = [...prev];
       arr.push(tablearr);
@@ -39,8 +37,16 @@ function CustomerMaster() {
     setshowsearchform(false);
   }
 
-  function fetchcustomerdata(customerdataarr) {
-    setcustomerupdatedata(customerdataarr);
+  function fetchcustomerdata(customerid) {
+    const url = `${process.env.REACT_APP_API_URL}/api/v1/Customer/GetCustomerById?id=${customerid}`;
+    axios
+      .get(url)
+      .then((res) => {
+        setcustomerupdatedata(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   useEffect(() => {
@@ -55,9 +61,7 @@ function CustomerMaster() {
           data.push(response.data[i].id);
           data.push(response.data[i].orgName);
           data.push(response.data[i].description);
-          data.push(response.data[i].addresses);
-          data.push(response.data[i].contactCentres);
-          data.push(response.data[i].customerBoilers);
+
           setTableData((prev) => {
             const arr = [...prev];
             arr.push(data);
@@ -70,6 +74,7 @@ function CustomerMaster() {
       });
   }, [reload]);
 
+  function fetchaddressesbycustomerid() {}
   return (
     <section className="customer-master">
       <ToastContainer />
@@ -94,7 +99,7 @@ function CustomerMaster() {
           setReload={setReload}
           triggerupdate={triggerupdate}
           customerupdatedata={customerupdatedata}
-          key={`${customerupdatedata}-${triggerupdate}`}
+          key={`${customerupdatedata?.id}-${triggerupdate}-${datareload}`}
         />
       )}
       {showsearchform && (
@@ -112,6 +117,8 @@ function CustomerMaster() {
         url="Customer/DeleteCustomer"
         reload={reload}
         setReload={setReload}
+        setdatareload={setdatareload}
+        datareload={datareload}
       />
     </section>
   );

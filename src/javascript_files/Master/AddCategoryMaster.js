@@ -4,6 +4,7 @@ import "../../css_files/Master/AddCategoryMaster.css";
 import CloseForm from "./CloseForm";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 function AddCategoryMaster({
   setshowaddform,
@@ -57,6 +58,14 @@ function AddCategoryMaster({
           toast.error("Failed to Add Record", {
             position: "bottom-center",
           });
+
+          if (error.status === 500) {
+            Swal.fire({
+              title: "Errors Occured",
+              text: error.response.data.error,
+              icon: "error",
+            });
+          }
         });
     }
   }
